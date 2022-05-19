@@ -1052,7 +1052,6 @@ class Quadfinger(VecTask):
                 lower=self._robot_limits["joint_torque"].low,
                 upper=self._robot_limits["joint_torque"].high
             )
-        print("***applied torque: ", applied_torque)
         # set computed torques to simulator buffer.
         self.gym.set_dof_actuation_force_tensor(self.sim, gymtorch.unwrap_tensor(applied_torque))
 
