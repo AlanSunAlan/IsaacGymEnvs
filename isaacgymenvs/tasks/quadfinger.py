@@ -206,7 +206,7 @@ class Quadfinger(VecTask):
     # Constants for limits
     # Ref: https://github.com/rr-learning/rrc_simulation/blob/master/python/rrc_simulation/trifinger_platform.py#L68
     # maximum joint torque (in N-m) applicable on each actuator
-    _max_torque_Nm = 0.36
+    _max_torque_Nm = 3.6
     # maximum joint velocity (in rad/s) on each actuator
     _max_velocity_radps = 10
 
@@ -249,8 +249,8 @@ class Quadfinger(VecTask):
         "joint_position": SimpleNamespace(
             # matches those on the real robot
             #'''Modified pos limits'''
-            low=np.array([-3.14, -1.57, -4.71] * _dims.NumFingers.value, dtype=np.float32),
-            high=np.array([3.14, 1.57, 4.71] * _dims.NumFingers.value, dtype=np.float32),
+            low=np.array([-3.14, -1.57, -2.36] * _dims.NumFingers.value, dtype=np.float32),
+            high=np.array([3.14, 1.57, 2.36] * _dims.NumFingers.value, dtype=np.float32),
             default=np.array([0.0, 0.0, 0.0] * _dims.NumFingers.value, dtype=np.float32),
         ),
         "joint_velocity": SimpleNamespace(
@@ -1052,6 +1052,7 @@ class Quadfinger(VecTask):
                 lower=self._robot_limits["joint_torque"].low,
                 upper=self._robot_limits["joint_torque"].high
             )
+        print("***applied torque: ", applied_torque)
         # set computed torques to simulator buffer.
         self.gym.set_dof_actuation_force_tensor(self.sim, gymtorch.unwrap_tensor(applied_torque))
 

@@ -185,7 +185,7 @@
   <joint name="0-module_to_parent" type="fixed">
     <parent link="z_offset_link"/>
     <child link="0-base_motor_frame"/>
-    <origin rpy="3.14159265 0 1.570796325" xyz="-0.12 0 0"/>
+    <origin rpy="3.14159265 0 1.570796325" xyz="-0.1 0 0"/>
   </joint>
   <!--Fix the parts which are not supposed to move-->
   <joint name="0-fix_xm430_0" type="fixed">
@@ -220,14 +220,14 @@
     <parent link="0-xm430_2"/>
     <child link="0-finger1"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-1.570796325" upper="1.570796325" velocity="1000"/>
     <origin rpy="0 0 0" xyz="0 0 0.0368"/>
   </joint>
   <joint name="0-dof3" type="revolute">
     <parent link="0-finger1"/>
     <child link="0-finger2"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
   <!--frames that may be helpful-->
@@ -398,7 +398,7 @@
   <joint name="1-module_to_parent" type="fixed">
     <parent link="z_offset_link"/>
     <child link="1-base_motor_frame"/>
-    <origin rpy="3.14159265 0 3.14159265" xyz="0 -0.12 0"/>
+    <origin rpy="3.14159265 0 3.14159265" xyz="0 -0.1 0"/>
   </joint>
   <!--Fix the parts which are not supposed to move-->
   <joint name="1-fix_xm430_0" type="fixed">
@@ -433,14 +433,14 @@
     <parent link="1-xm430_2"/>
     <child link="1-finger1"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-1.570796325" upper="1.570796325" velocity="1000"/>
     <origin rpy="0 0 0" xyz="0 0 0.0368"/>
   </joint>
   <joint name="1-dof3" type="revolute">
     <parent link="1-finger1"/>
     <child link="1-finger2"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
   <!--frames that may be helpful-->
@@ -611,7 +611,7 @@
   <joint name="2-module_to_parent" type="fixed">
     <parent link="z_offset_link"/>
     <child link="2-base_motor_frame"/>
-    <origin rpy="3.14159265 0 -1.570796325" xyz="0.12 0 0"/>
+    <origin rpy="3.14159265 0 -1.570796325" xyz="0.1 0 0"/>
   </joint>
   <!--Fix the parts which are not supposed to move-->
   <joint name="2-fix_xm430_0" type="fixed">
@@ -646,14 +646,14 @@
     <parent link="2-xm430_2"/>
     <child link="2-finger1"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-1.570796325" upper="1.570796325" velocity="1000"/>
     <origin rpy="0 0 0" xyz="0 0 0.0368"/>
   </joint>
   <joint name="2-dof3" type="revolute">
     <parent link="2-finger1"/>
     <child link="2-finger2"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
   <!--frames that may be helpful-->
@@ -824,7 +824,7 @@
   <joint name="3-module_to_parent" type="fixed">
     <parent link="z_offset_link"/>
     <child link="3-base_motor_frame"/>
-    <origin rpy="3.14159265 0 0" xyz="0 0.12 0"/>
+    <origin rpy="3.14159265 0 0" xyz="0 0.1 0"/>
   </joint>
   <!--Fix the parts which are not supposed to move-->
   <joint name="3-fix_xm430_0" type="fixed">
@@ -859,14 +859,14 @@
     <parent link="3-xm430_2"/>
     <child link="3-finger1"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-1.570796325" upper="1.570796325" velocity="1000"/>
     <origin rpy="0 0 0" xyz="0 0 0.0368"/>
   </joint>
   <joint name="3-dof3" type="revolute">
     <parent link="3-finger1"/>
     <child link="3-finger2"/>
     <axis xyz="0 0 -1"/>
-    <limit effort="1000" lower="-3.14159265" upper="3.14159265" velocity="1000"/>
+    <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
   <!--frames that may be helpful-->
