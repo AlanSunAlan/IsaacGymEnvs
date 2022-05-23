@@ -41,6 +41,7 @@ from tasks.quadcopter import Quadcopter
 from tasks.shadow_hand import ShadowHand
 from tasks.trifinger import Trifinger
 from tasks.quadfinger import Quadfinger
+from tasks.fingerik import FingerIK
 
 # Mappings from strings to environments
 isaacgym_task_map = {
@@ -58,4 +59,5 @@ isaacgym_task_map = {
     "ShadowHand": ShadowHand,
     "Trifinger": Trifinger,
     "Quadfinger": Quadfinger,
+    "FingerIK": FingerIK,
 }

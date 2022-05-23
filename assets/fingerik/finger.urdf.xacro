@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--Import parts from xacro file-->
+    <xacro:include filename="module.urdf.xacro"/>
+
+    <link name="dummy">
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+    </link>
+
+    <xacro:module module_prefix="0" parent_link="dummy">
+        <origin xyz="0 0 0" rpy="${PI} 0 ${PI/2.0}"/>
+    </xacro:module>
+
+</robot>

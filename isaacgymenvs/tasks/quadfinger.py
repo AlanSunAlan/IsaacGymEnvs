@@ -206,7 +206,7 @@ class Quadfinger(VecTask):
     # Constants for limits
     # Ref: https://github.com/rr-learning/rrc_simulation/blob/master/python/rrc_simulation/trifinger_platform.py#L68
     # maximum joint torque (in N-m) applicable on each actuator
-    _max_torque_Nm = 3.6
+    _max_torque_Nm = 3
     # maximum joint velocity (in rad/s) on each actuator
     _max_velocity_radps = 10
 
@@ -322,8 +322,8 @@ class Quadfinger(VecTask):
     _robot_dof_gains = {
         # The kp and kd gains of the PD control of the fingers.
         # Note: This depends on simulation step size and is set for a rate of 250 Hz.
-        "stiffness": [10.0, 10.0, 10.0] * _dims.NumFingers.value,
-        "damping": [0.1, 0.3, 0.001] * _dims.NumFingers.value,
+        "stiffness": [0.8, 0.8, 0.8] * _dims.NumFingers.value,
+        "damping": [0.3, 0.3, 0.3] * _dims.NumFingers.value,
         # The kd gains used for damping the joint motor velocities during the
         # safety torque check on the joint motors.
         "safety_damping": [0.08, 0.08, 0.04] * _dims.NumFingers.value
@@ -1052,6 +1052,7 @@ class Quadfinger(VecTask):
                 lower=self._robot_limits["joint_torque"].low,
                 upper=self._robot_limits["joint_torque"].high
             )
+
         # set computed torques to simulator buffer.
         self.gym.set_dof_actuation_force_tensor(self.sim, gymtorch.unwrap_tensor(applied_torque))
 
