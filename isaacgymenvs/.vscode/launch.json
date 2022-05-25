@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["task=Quadfinger", "num_envs=2", "checkpoint=/home/bionicdl/SHR/IsaacGymEnvs/isaacgymenvs/runs/Quadfinger-fromGoldenboy/last_Quadfinger_ep_4300_rew_366.4183.pth"]
+            "args": ["task=Quadfinger", "num_envs=2"]
         }
     ]
 }
