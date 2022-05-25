@@ -15,7 +15,7 @@ env:
   clipObservations: 5.0
   clipActions: 1.0
 
-  task_difficulty: 2
+  task_difficulty: 3
   enable_ft_sensors: false
   asymmetric_obs: true
   normalize_obs: true
@@ -35,20 +35,20 @@ env:
   reward_terms:
     finger_move_penalty:
       activate: true
-      weight: -0.3
+      weight: -0.5
     finger_reach_object_rate:
       activate: true
       norm_p: 2
-      weight: -500
+      weight: -750
     object_dist:
-      activate: False
-      weight: 1500
+      activate: false
+      weight: 2000
     object_rot:
       activate: false
-      weight: 1500
+      weight: 2000
     keypoints_dist:
       activate: true
-      weight: 1500
+      weight: 2000
   termination_conditions:
     success:
       orientation_tolerance: 0.4

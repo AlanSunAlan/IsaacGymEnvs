@@ -1,4 +1,4 @@
-name: Trifinger
+name: FingerIK
 
 physics_engine: ${..physics_engine}
 

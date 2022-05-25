@@ -748,6 +748,8 @@ class Quadfinger(VecTask):
 
         self.extras.update({"env/rewards/"+k: v.mean() for k, v in log_dict.items()})
 
+        return log_dict
+
     def compute_observations(self):
         # refresh memory buffers
         self.gym.refresh_dof_state_tensor(self.sim)
@@ -1064,7 +1066,7 @@ class Quadfinger(VecTask):
         self.randomize_buf += 1
 
         self.compute_observations()
-        self.compute_reward(self.actions)
+        info = self.compute_reward(self.actions)
 
         # check termination conditions (success only)
         self._check_termination()
@@ -1390,10 +1392,10 @@ def compute_trifinger_reward(
     info: Dict[str, torch.Tensor] = {
         'finger_movement_penalty': finger_movement_penalty,
         'finger_reach_object_reward': finger_reach_object_reward,
-        'pose_reward': finger_reach_object_reward,
+        'pose_reward': pose_reward,
         'reward': total_reward,
     }
-
+    print(info)
     return total_reward, reset, info
 
 

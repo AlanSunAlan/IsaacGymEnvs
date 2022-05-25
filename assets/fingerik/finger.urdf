@@ -95,13 +95,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
