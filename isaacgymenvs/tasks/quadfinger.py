@@ -1395,7 +1395,7 @@ def compute_trifinger_reward(
         'pose_reward': pose_reward,
         'reward': total_reward,
     }
-    print(info)
+
     return total_reward, reset, info
 
 
