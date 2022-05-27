@@ -206,7 +206,7 @@ class Quadfinger(VecTask):
     # Constants for limits
     # Ref: https://github.com/rr-learning/rrc_simulation/blob/master/python/rrc_simulation/trifinger_platform.py#L68
     # maximum joint torque (in N-m) applicable on each actuator
-    _max_torque_Nm = 3
+    _max_torque_Nm = 0.5
     # maximum joint velocity (in rad/s) on each actuator
     _max_velocity_radps = 10
 
@@ -385,6 +385,7 @@ class Quadfinger(VecTask):
                                 f'{finger_name}-dof3']
         self._robot_dof_indices = OrderedDict.fromkeys(robot_dof_names, None)
 
+        self.gym.set_sim_params(self.sim)
         super().__init__(config=self.cfg, sim_device=sim_device, graphics_device_id=graphics_device_id, headless=headless)
 
         if self.viewer != None:
@@ -426,7 +427,7 @@ class Quadfinger(VecTask):
             # self._ft_sensors_values = gymtorch.wrap_tensor(sensor_tensor).view(self.num_envs, num_ft_dims)
 
             sensor_tensor = self.gym.acquire_force_sensor_tensor(self.sim)
-            print(f"**Sensor tensor shape:{sensor_tensor.shape}")
+
             self._ft_sensors_values = gymtorch.wrap_tensor(sensor_tensor).view(self.num_envs, num_ft_dims)
 
             dof_force_tensor = self.gym.acquire_dof_force_tensor(self.sim)
