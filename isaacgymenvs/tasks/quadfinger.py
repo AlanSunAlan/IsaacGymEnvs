@@ -385,7 +385,6 @@ class Quadfinger(VecTask):
                                 f'{finger_name}-dof3']
         self._robot_dof_indices = OrderedDict.fromkeys(robot_dof_names, None)
 
-        self.gym.set_sim_params(self.sim)
         super().__init__(config=self.cfg, sim_device=sim_device, graphics_device_id=graphics_device_id, headless=headless)
 
         if self.viewer != None:
