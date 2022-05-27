@@ -39,7 +39,7 @@ env:
     finger_reach_object_rate:
       activate: true
       norm_p: 2
-      weight: -250
+      weight: -750
     object_dist:
       activate: false
       weight: 2000
