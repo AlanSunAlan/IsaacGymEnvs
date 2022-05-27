@@ -208,7 +208,7 @@ class Quadfinger(VecTask):
     # maximum joint torque (in N-m) applicable on each actuator
     _max_torque_Nm = 0.5
     # maximum joint velocity (in rad/s) on each actuator
-    _max_velocity_radps = 10
+    _max_velocity_radps = 4
 
     # History of state: Number of timesteps to save history for
     # Note: Currently used only to manage history of object and frame states.
@@ -527,11 +527,11 @@ class Quadfinger(VecTask):
             # note: since safety checks are employed, the simulator PD controller is not
             #       used. Instead the torque is computed manually and applied, even if the
             #       command mode is 'position'.
-            robot_dof_props['driveMode'][dof_index] = gymapi.DOF_MODE_EFFORT
-            robot_dof_props['stiffness'][dof_index] = 0.0
-            robot_dof_props['damping'][dof_index] = 0.0
+            robot_dof_props['driveMode'][dof_index] = gymapi.DOF_MODE_POS
+            robot_dof_props['stiffness'][dof_index] = 2.0
+            robot_dof_props['damping'][dof_index] = 0.3
             # set dof limits
-            robot_dof_props['effort'][dof_index] = self._max_torque_Nm
+            #robot_dof_props['effort'][dof_index] = self._max_torque_Nm
             robot_dof_props['velocity'][dof_index] = self._max_velocity_radps
             robot_dof_props['lower'][dof_index] = float(self._robot_limits["joint_position"].low[k])
             robot_dof_props['upper'][dof_index] = float(self._robot_limits["joint_position"].high[k])
@@ -796,7 +796,6 @@ class Quadfinger(VecTask):
             )
 
     def reset_idx(self, env_ids):
-
         # randomization can happen only at reset time, since it can reset actor positions on GPU
         if self.randomize:
             self.apply_randomizations(self.randomization_params)
@@ -1025,38 +1024,8 @@ class Quadfinger(VecTask):
         else:
             action_transformed = self.actions
 
-        # compute command on the basis of mode selected
-        if self.cfg["env"]["command_mode"] == 'torque':
-            # command is the desired joint torque
-            computed_torque = action_transformed
-        elif self.cfg["env"]["command_mode"] == 'position':
-            # command is the desired joint positions
-            desired_dof_position = action_transformed
-            # compute torque to apply
-            computed_torque = self._robot_dof_gains["stiffness"] * (desired_dof_position - self._dof_position)
-            computed_torque -= self._robot_dof_gains["damping"] * self._dof_velocity
-        else:
-            msg = f"Invalid command mode. Input: {self.cfg['env']['command_mode']} not in ['torque', 'position']."
-            raise ValueError(msg)
-        # apply clamping of computed torque to actuator limits
-        applied_torque = saturate(
-            computed_torque,
-            lower=self._robot_limits["joint_torque"].low,
-            upper=self._robot_limits["joint_torque"].high
-        )
-        # apply safety damping and clamping of the action torque if enabled
-        if self.cfg["env"]["apply_safety_damping"]:
-            # apply damping by joint velocity
-            applied_torque -= self._robot_dof_gains["safety_damping"] * self._dof_velocity
-            # clamp input
-            applied_torque = saturate(
-                applied_torque,
-                lower=self._robot_limits["joint_torque"].low,
-                upper=self._robot_limits["joint_torque"].high
-            )
-
-        # set computed torques to simulator buffer.
-        self.gym.set_dof_actuation_force_tensor(self.sim, gymtorch.unwrap_tensor(applied_torque))
+        # Set the target position
+        self.gym.set_dof_position_target_tensor(self.sim, gymtorch.unwrap_tensor(action_transformed))
 
     def post_physics_step(self):
 
@@ -1067,7 +1036,17 @@ class Quadfinger(VecTask):
 
         self.compute_observations()
         info = self.compute_reward(self.actions)
-
+        finger_reach_p = info["finger_reach_object_reward"]
+        #if finger_reach_p < -100:
+        if True:
+            print("Finger reach object: ", finger_reach_p)
+            pre_state = self._fingertips_frames_state_history[0]
+            current_state = self._fingertips_frames_state_history[1]
+            print(self.progress_buf)
+            #print("Finger tip states: ")
+            #print(pre_state)
+            #print(current_state)
+            print("Reset: ", self.reset_buf)
         # check termination conditions (success only)
         self._check_termination()
 
@@ -1339,12 +1318,12 @@ def compute_trifinger_reward(
     # distance from each finger to the centroid of the object, shape (N, 3).
     curr_norms = torch.stack([
         torch.norm(fingertip_state[:, i, 0:3] - object_state[:, 0:3], p=2, dim=-1)
-        for i in range(3)
+        for i in range(4)
     ], dim=-1)
     # distance from each finger to the centroid of the object in the last timestep, shape (N, 3).
     prev_norms = torch.stack([
         torch.norm(last_fingertip_state[:, i, 0:3] - last_object_state[:, 0:3], p=2, dim=-1)
-        for i in range(3)
+        for i in range(4)
     ], dim=-1)
 
     ft_sched_val = 1.0 if ft_sched_start <= env_steps_count <= ft_sched_end else 0.0
@@ -1388,6 +1367,7 @@ def compute_trifinger_reward(
     # reset agents
     reset = torch.zeros_like(reset_buf)
     reset = torch.where(progress_buf >= episode_length - 1, torch.ones_like(reset_buf), reset)
+    reset = torch.where(finger_reach_object_reward <= -100, torch.ones_like(reset_buf), reset)
 
     info: Dict[str, torch.Tensor] = {
         'finger_movement_penalty': finger_movement_penalty,
