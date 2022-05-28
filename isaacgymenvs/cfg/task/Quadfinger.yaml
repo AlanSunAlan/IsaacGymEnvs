@@ -15,7 +15,7 @@ env:
   clipObservations: 5.0
   clipActions: 1.0
 
-  task_difficulty: 3
+  task_difficulty: 4
   enable_ft_sensors: false
   asymmetric_obs: true
   normalize_obs: true
@@ -48,7 +48,7 @@ env:
       weight: 2000
     keypoints_dist:
       activate: true
-      weight: 2000
+      weight: 1000
   termination_conditions:
     success:
       orientation_tolerance: 0.4

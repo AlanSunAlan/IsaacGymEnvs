@@ -208,7 +208,7 @@ class Quadfinger(VecTask):
     # maximum joint torque (in N-m) applicable on each actuator
     _max_torque_Nm = 0.5
     # maximum joint velocity (in rad/s) on each actuator
-    _max_velocity_radps = 4
+    _max_velocity_radps = 10
 
     # History of state: Number of timesteps to save history for
     # Note: Currently used only to manage history of object and frame states.
@@ -1039,14 +1039,14 @@ class Quadfinger(VecTask):
         finger_reach_p = info["finger_reach_object_reward"]
         #if finger_reach_p < -100:
         if True:
-            print("Finger reach object: ", finger_reach_p)
-            pre_state = self._fingertips_frames_state_history[0]
-            current_state = self._fingertips_frames_state_history[1]
-            print(self.progress_buf)
+            print(info)
+            #print("Finger reach object: ", finger_reach_p)
+            #pre_state = self._fingertips_frames_state_history[0]
+            #current_state = self._fingertips_frames_state_history[1]
+            #print(self.progress_buf)
             #print("Finger tip states: ")
             #print(pre_state)
             #print(current_state)
-            print("Reset: ", self.reset_buf)
         # check termination conditions (success only)
         self._check_termination()
 
@@ -1310,6 +1310,8 @@ def compute_trifinger_reward(
     # Reward penalising finger movement
 
     fingertip_vel = (fingertip_state[:, :, 0:3] - last_fingertip_state[:, :, 0:3]) / dt
+    #print("****")
+    #print(fingertip_vel)
 
     finger_movement_penalty = finger_move_penalty_weight * fingertip_vel.pow(2).view(-1, 12).sum(dim=-1)
 
@@ -1335,11 +1337,10 @@ def compute_trifinger_reward(
 
         delta = object_keypoints - goal_keypoints
 
-        dist_l2 = torch.norm(delta, p=2, dim=-1)
+        dist_l2 = torch.norm(delta, p=2, dim=-1).sum(dim=-1)
+        #keypoints_kernel_sum = lgsk_kernel(dist_l2, scale=30., eps=2.).mean(dim=-1)
 
-        keypoints_kernel_sum = lgsk_kernel(dist_l2, scale=30., eps=2.).mean(dim=-1)
-
-        pose_reward = object_dist_weight * dt * keypoints_kernel_sum
+        pose_reward = -1 * object_dist_weight * dt * dist_l2
 
     else:
 
