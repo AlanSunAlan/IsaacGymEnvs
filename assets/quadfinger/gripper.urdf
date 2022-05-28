@@ -37,13 +37,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -56,13 +56,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -75,13 +75,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -94,13 +94,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -113,13 +113,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -250,13 +250,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -269,13 +269,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -288,13 +288,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -307,13 +307,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -326,13 +326,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -463,13 +463,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -482,13 +482,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -501,13 +501,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -520,13 +520,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -539,13 +539,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -676,13 +676,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -695,13 +695,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -714,13 +714,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/xm430.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/XM430-simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -733,13 +733,13 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="./mesh/base_motor_frame.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/base_motor_frame_simplified.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>
@@ -752,13 +752,13 @@
     <visual>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="./mesh/dual_servo_shell.obj" scale="0.001 0.001 0.001"/>
+        <mesh filename="./mesh/dual_servo_shell_simplified.obj" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
   </link>

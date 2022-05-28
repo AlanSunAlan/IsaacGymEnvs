@@ -74,13 +74,13 @@
             <visual>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
                 <geometry>
-                    <mesh filename="${root_folder}/mesh/xm430.obj" scale="${scale}"/>
+                    <mesh filename="${root_folder}/mesh/XM430-simplified.obj" scale="${scale}"/>
                 </geometry>
             </visual>
             <collision>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
                 <geometry>
-                    <mesh filename="${root_folder}/mesh/xm430.obj" scale="${scale}"/>
+                    <mesh filename="${root_folder}/mesh/XM430-simplified.obj" scale="${scale}"/>
                 </geometry>
             </collision>
         </link>
@@ -92,13 +92,13 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="${root_folder}/mesh/base_motor_frame.obj" scale="${scale}"/>
+                    <mesh filename="${root_folder}/mesh/base_motor_frame_simplified.stl" scale="${scale}"/>
                 </geometry>
             </visual>
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="${root_folder}/mesh/base_motor_frame.obj" scale="${scale}"/>
+                    <mesh filename="${root_folder}/mesh/base_motor_frame_simplified.stl" scale="${scale}"/>
                 </geometry>
             </collision>
         </link>
@@ -110,13 +110,13 @@
             <visual>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
                 <geometry>
-                    <mesh filename="${root_folder}/mesh/dual_servo_shell.obj" scale="${scale}"/>
+                    <mesh filename="${root_folder}/mesh/dual_servo_shell_simplified.obj" scale="${scale}"/>
                 </geometry>
             </visual>
             <collision>
                 <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
                 <geometry>
-                    <mesh filename="${root_folder}/mesh/dual_servo_shell.obj" scale="${scale}"/>
+                    <mesh filename="${root_folder}/mesh/dual_servo_shell_simplified.obj" scale="${scale}"/>
                 </geometry>
             </collision>
         </link>
