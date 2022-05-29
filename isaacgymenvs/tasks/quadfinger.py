@@ -251,7 +251,7 @@ class Quadfinger(VecTask):
             #'''Modified pos limits'''
             low=np.array([-3.14, -1.57, -2.36] * _dims.NumFingers.value, dtype=np.float32),
             high=np.array([3.14, 1.57, 2.36] * _dims.NumFingers.value, dtype=np.float32),
-            default=np.array([0.0, 0.0, 0.0] * _dims.NumFingers.value, dtype=np.float32),
+            default=np.array([2.6, -1.57, 2.3] * _dims.NumFingers.value, dtype=np.float32),
         ),
         "joint_velocity": SimpleNamespace(
             low=np.full(_dims.JointVelocityDim.value, -_max_velocity_radps, dtype=np.float32),
@@ -1113,12 +1113,12 @@ class Quadfinger(VecTask):
 
         robot_asset_options.vhacd_enabled = True
         robot_asset_options.vhacd_params = gymapi.VhacdParams()
-        robot_asset_options.vhacd_params.resolution = 100000
+        robot_asset_options.vhacd_params.resolution = 20000
         robot_asset_options.vhacd_params.concavity = 0.0025
         robot_asset_options.vhacd_params.alpha = 0.04
         robot_asset_options.vhacd_params.beta = 1.0
         robot_asset_options.vhacd_params.convex_hull_downsampling = 4
-        robot_asset_options.vhacd_params.max_num_vertices_per_ch = 256
+        robot_asset_options.vhacd_params.max_num_vertices_per_ch = 128
 
         if self.physics_engine == gymapi.SIM_PHYSX:
             robot_asset_options.use_physx_armature = True
@@ -1368,7 +1368,7 @@ def compute_trifinger_reward(
     # reset agents
     reset = torch.zeros_like(reset_buf)
     reset = torch.where(progress_buf >= episode_length - 1, torch.ones_like(reset_buf), reset)
-    reset = torch.where(finger_reach_object_reward <= -100, torch.ones_like(reset_buf), reset)
+    #reset = torch.where(finger_reach_object_reward <= -100, torch.ones_like(reset_buf), reset)
 
     info: Dict[str, torch.Tensor] = {
         'finger_movement_penalty': finger_movement_penalty,

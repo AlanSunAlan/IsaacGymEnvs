@@ -48,7 +48,7 @@ env:
       weight: 2000
     keypoints_dist:
       activate: true
-      weight: 1000
+      weight: 500
   termination_conditions:
     success:
       orientation_tolerance: 0.4
