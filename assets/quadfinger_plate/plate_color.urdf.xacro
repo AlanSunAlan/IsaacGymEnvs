@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name="side_length" value="0.4"/>
+    <xacro:property name="thickness" value="0.01"/>
+    <xacro:property name="a_color_value" value="1.0"/>
+    <xacro:property name="density" value="1000"/>
+
+    <material name="front_material">
+        <color rgba="0.5 0.2 0.2 ${a_color_value}"/>
+    </material>
+
+    <material name="rear_material">
+        <color rgba="0.2 0.5 0.2 ${a_color_value}"/>
+    </material>      
+    
+    <link name="base"/>
+
+    <link name="front">
+        <visual>
+            <origin xyz="0 ${side_length/4.0} ${thickness/2.0}"/>
+            <geometry>
+                <box size="${side_length} ${side_length/2.0} ${thickness}"/>
+            </geometry>
+            <material name="front_material"/>
+        </visual>
+        <collision>
+            <origin xyz="0 ${side_length/4.0} ${thickness/2.0}"/>
+            <geometry>
+                <box size="${side_length} ${side_length/2.0} ${thickness}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <density value="${density}"/>
+        </inertial>
+    </link>
+
+    <link name="rear">
+        <visual>
+            <origin xyz="0 ${side_length/-4.0} ${thickness/2.0}"/>
+            <geometry>
+                <box size="${side_length} ${side_length/2.0} ${thickness}"/>
+            </geometry>
+            <material name="rear_material"/>
+        </visual>
+        <collision>
+            <origin xyz="0 ${side_length/-4.0} ${thickness/2.0}"/>
+            <geometry>
+                <box size="${side_length} ${side_length/2.0} ${thickness}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <density value="${density}"/>
+        </inertial>
+    </link>
+
+    <joint name="front_joint" type="fixed">
+        <parent link="base"/>
+        <child link="front"/>
+    </joint>
+
+    <joint name="rear_joint" type="fixed">
+        <parent link="base"/>
+        <child link="rear"/>
+    </joint>           
+
+</robot>

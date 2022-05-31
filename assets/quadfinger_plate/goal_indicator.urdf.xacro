@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="cylinder_radius" value="0.01"/>
+    <xacro:property name="cylinder_len" value = "0.12"/>
+    <!--xacro:property name="pi" value="3.14159"/-->
+
+    <material name="front_material">
+        <color rgba="0.5 0.2 0.2 1"/>
+    </material>
+
+    <material name="rear_material">
+        <color rgba="0.2 0.5 0.2 1"/>
+    </material>  
+
+    <link name="base"/>
+
+    <link name="front">
+        <visual>
+            <origin xyz="0 ${cylinder_len/2} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${cylinder_radius}" length="${cylinder_len}"/>
+            </geometry>
+            <material name="front_material"/>
+        </visual>
+        <collision>
+            <origin xyz="0 ${cylinder_len/2} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${cylinder_radius}" length="${cylinder_len}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <density value="1000.0"/>
+        </inertial>
+    </link>
+
+    <link name="rear">
+        <visual>
+            <origin xyz="0 ${cylinder_len/-2} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${cylinder_radius}" length="${cylinder_len}"/>
+            </geometry>
+            <material name="rear_material"/>
+        </visual>
+        <collision>
+            <origin xyz="0 ${cylinder_len/-2} 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${cylinder_radius}" length="${cylinder_len}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <density value="1000.0"/>
+        </inertial>
+    </link>
+
+    <joint name="front_joint" type="fixed">
+        <parent link="base"/>
+        <child link="front"/>
+    </joint>
+
+    <joint name="rear_joint" type="fixed">
+        <parent link="base"/>
+        <child link="rear"/>
+    </joint>      
+
+</robot>
