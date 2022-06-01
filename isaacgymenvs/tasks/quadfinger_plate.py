@@ -381,8 +381,8 @@ class QuadfingerPlate(VecTask):
 
         # May need to change this:
         tip_velocity_limit = SimpleNamespace(
-            low=torch.tensor([-0.2]*6, dtype=torch.float32, device=self.device),
-            high=torch.tensor([0.2]*6, dtype=torch.float32, device=self.device),
+            low=torch.tensor([-1, -1, -1, -np.math.pi, -np.math.pi, -np.math.pi], dtype=torch.float32, device=self.device),
+            high=torch.tensor([1, 1, 1, np.math.pi, np.math.pi, np.math.pi], dtype=torch.float32, device=self.device),
         )
 
         tip_state_limit = SimpleNamespace(
@@ -400,14 +400,14 @@ class QuadfingerPlate(VecTask):
 
         # x, y, yaw, linear velocity (x,y), angular velocity(yaw)
         plate_state_limit = SimpleNamespace(
-            low=torch.tensor([-0.5*self.MaxComDistance, -0.5*self.MaxComDistance, 0, -0.2, -0.2, -0.5*np.math.pi], dtype=torch.float32, device=self.device), 
-            high=torch.tensor([0.5*self.MaxComDistance, 0.5*self.MaxComDistance, 2*np.math.pi, 0.2, 0.2, 0.5*np.math.pi], dtype=torch.float32, device=self.device)
+            low=torch.tensor([-self.MaxComDistance, -self.MaxComDistance, 0, -0.2, -0.2, -0.5*np.math.pi], dtype=torch.float32, device=self.device), 
+            high=torch.tensor([self.MaxComDistance, self.MaxComDistance, 2*np.math.pi, 0.2, 0.2, 0.5*np.math.pi], dtype=torch.float32, device=self.device)
         )
 
         # x, y, yaw_angle
         goal_plate_pose_limit = SimpleNamespace(
-            low=torch.tensor([-0.5*self.MaxComDistance, -0.5*self.MaxComDistance, 0], dtype=torch.float32, device=self.device),
-            high=torch.tensor([0.5*self.MaxComDistance, 0.5*self.MaxComDistance, 2*np.math.pi], dtype=torch.float32, device=self.device)
+            low=torch.tensor([-self.MaxComDistance, -self.MaxComDistance, 0], dtype=torch.float32, device=self.device),
+            high=torch.tensor([self.MaxComDistance, self.MaxComDistance, 2*np.math.pi], dtype=torch.float32, device=self.device)
         )
 
         # For observation limit
@@ -472,7 +472,12 @@ class QuadfingerPlate(VecTask):
         # Check if the envs should be terminated and reset
         self.check_termination()
 
-        #print("Observation: ", self.obs_buf[0, :])
+        print("Observation: ", self.obs_buf[0, :])
+        print(self.states_buf)
+        not_normal = torch.zeros_like(self.obs_buf[0, :])
+        not_normal = torch.where(self.obs_buf[0, :] >= 1, torch.ones_like(not_normal), not_normal)
+        not_normal = torch.where(self.obs_buf[0, :] <= -1, torch.ones_like(not_normal), not_normal)
+        #print(not_normal)
         #print("Reward: ", self.rew_buf[0])
 
     def computeObservation(self):
@@ -501,7 +506,12 @@ class QuadfingerPlate(VecTask):
                 self.obs_buf,
                 lower=self.obs_lower_limit,
                 upper=self.obs_upper_limit
-            )        
+            )  
+            self.states_buf = scale_transform(
+                self.states_buf,
+                lower=self.state_lower_limit,
+                upper=self.state_upper_limit
+            )
 
     def computeReward(self):
         self.rew_buf[:] = 0.
@@ -521,7 +531,11 @@ class QuadfingerPlate(VecTask):
         dis_weighted = self.cfg["env"]["reward_weight"]["dis_weight"] * dis_l2
         yaw_weighted = self.cfg["env"]["reward_weight"]["yaw_weight"] * min_yaw_diff
         self.rew_buf =  dis_weighted + yaw_weighted
-                          
+        #print(self.rew_buf) 
+
+        # Touch plate reward
+        # If the plate moves, give the agent some reward
+
 
         update_info = {
             "raw_distance_l2": dis_l2,
