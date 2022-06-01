@@ -400,14 +400,14 @@ class QuadfingerPlate(VecTask):
 
         # x, y, yaw, linear velocity (x,y), angular velocity(yaw)
         plate_state_limit = SimpleNamespace(
-            low=torch.tensor([-0.5*self.BoundaryDiameter, -0.5*self.BoundaryDiameter, 0, -0.05, -0.05, -np.math.pi/2], dtype=torch.float32, device=self.device), 
-            high=torch.tensor([0.5*self.BoundaryDiameter, 0.5*self.BoundaryDiameter, 0, 0.05, 0.05, np.math.pi/2], dtype=torch.float32, device=self.device)
+            low=torch.tensor([-0.5*self.MaxComDistance, -0.5*self.MaxComDistance, 0, -0.2, -0.2, -0.5*np.math.pi], dtype=torch.float32, device=self.device), 
+            high=torch.tensor([0.5*self.MaxComDistance, 0.5*self.MaxComDistance, 2*np.math.pi, 0.2, 0.2, 0.5*np.math.pi], dtype=torch.float32, device=self.device)
         )
 
         # x, y, yaw_angle
         goal_plate_pose_limit = SimpleNamespace(
-            low=torch.tensor([-0.5*self.BoundaryDiameter, -0.5*self.BoundaryDiameter, 0], dtype=torch.float32, device=self.device),
-            high=torch.tensor([0.5*self.BoundaryDiameter, 0.5*self.BoundaryDiameter, 2*np.math.pi], dtype=torch.float32, device=self.device)
+            low=torch.tensor([-0.5*self.MaxComDistance, -0.5*self.MaxComDistance, 0], dtype=torch.float32, device=self.device),
+            high=torch.tensor([0.5*self.MaxComDistance, 0.5*self.MaxComDistance, 2*np.math.pi], dtype=torch.float32, device=self.device)
         )
 
         # For observation limit
@@ -472,6 +472,9 @@ class QuadfingerPlate(VecTask):
         # Check if the envs should be terminated and reset
         self.check_termination()
 
+        #print("Observation: ", self.obs_buf[0, :])
+        #print("Reward: ", self.rew_buf[0])
+
     def computeObservation(self):
         # Refresh tensors
         self.gym.refresh_dof_state_tensor(self.sim)
@@ -515,8 +518,20 @@ class QuadfingerPlate(VecTask):
         # Element-wise compare
         min_yaw_diff = torch.minimum(yaw_diff, two_pi_minus_yaw)
 
-        self.rew_buf = self.cfg["env"]["reward_weight"]["dis_weight"] * dis_l2 + \
-                          self.cfg["env"]["reward_weight"]["yaw_weight"] * min_yaw_diff
+        dis_weighted = self.cfg["env"]["reward_weight"]["dis_weight"] * dis_l2
+        yaw_weighted = self.cfg["env"]["reward_weight"]["yaw_weight"] * min_yaw_diff
+        self.rew_buf =  dis_weighted + yaw_weighted
+                          
+
+        update_info = {
+            "raw_distance_l2": dis_l2,
+            "raw_yaw_diff": yaw_diff,
+            "distance_penalty_avg": dis_weighted,
+            "yaw_penalty_avg": yaw_weighted,
+            "reward_avg": self.rew_buf
+        }
+
+        self.extras.update({"env/rewards/"+k: v.mean() for k, v in update_info.items()})
 
     def check_termination(self):
         # Reaching the maximum episode timesteps
