@@ -472,8 +472,8 @@ class QuadfingerPlate(VecTask):
         # Check if the envs should be terminated and reset
         self.check_termination()
 
-        print("Observation: ", self.obs_buf[0, :])
-        print(self.states_buf)
+        #print("Observation: ", self.obs_buf[0, :])
+        #print(self.states_buf)
         not_normal = torch.zeros_like(self.obs_buf[0, :])
         not_normal = torch.where(self.obs_buf[0, :] >= 1, torch.ones_like(not_normal), not_normal)
         not_normal = torch.where(self.obs_buf[0, :] <= -1, torch.ones_like(not_normal), not_normal)
