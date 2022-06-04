@@ -226,7 +226,7 @@
   <joint name="0-dof3" type="revolute">
     <parent link="0-finger1"/>
     <child link="0-finger2"/>
-    <axis xyz="0 0 -1"/>
+    <axis xyz="0 0 1"/>
     <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
@@ -439,7 +439,7 @@
   <joint name="1-dof3" type="revolute">
     <parent link="1-finger1"/>
     <child link="1-finger2"/>
-    <axis xyz="0 0 -1"/>
+    <axis xyz="0 0 1"/>
     <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
@@ -652,7 +652,7 @@
   <joint name="2-dof3" type="revolute">
     <parent link="2-finger1"/>
     <child link="2-finger2"/>
-    <axis xyz="0 0 -1"/>
+    <axis xyz="0 0 1"/>
     <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
@@ -865,7 +865,7 @@
   <joint name="3-dof3" type="revolute">
     <parent link="3-finger1"/>
     <child link="3-finger2"/>
-    <axis xyz="0 0 -1"/>
+    <axis xyz="0 0 1"/>
     <limit effort="1000" lower="-2.3561944875" upper="2.3561944875" velocity="1000"/>
     <origin rpy="0 -0.7853981625 0" xyz="-0.0014142 -0.1 0.0014142"/>
   </joint>
