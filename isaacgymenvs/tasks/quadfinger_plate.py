@@ -39,12 +39,12 @@ class QuadfingerPlate(VecTask):
     ModuleKp = [0.8, 0.8, 0.8] # Equivalent to stiffness
     ModuleKd = [0.3, 0.3, 0.3] # Equivalent to damping
     # Joint velocity limits
-    ModuleMaxJointVelocites = [5, 5, 5] # In rad/s
+    ModuleMaxJointVelocites = [4, 4, 4] # In rad/s
     # Joint position limits
-    ModuleJointLowerLimits = [-3.14, -1.57, -2.3] # in radians
-    ModuleJointUpperLimits = [3.14, 1.57, 2.3]
+    ModuleJointLowerLimits = [-3.14, -1.57, 0.5236] # in radians
+    ModuleJointUpperLimits = [3.14, 1.57, 2.4086]
     # Joint torque limits
-    ModuleJointTorqueLimit = [2, 2, 2]
+    ModuleJointTorqueLimit = [1.2, 1.2, 1.2]
 
     # Default joint positions for the robot
     DefaultJointPositions = [2.6, -1.57, 2.3] * ModuleNum
