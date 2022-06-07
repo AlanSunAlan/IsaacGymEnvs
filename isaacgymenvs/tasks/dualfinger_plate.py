@@ -44,7 +44,7 @@ class DualfingerPlate(VecTask):
     ModuleJointLowerLimits = [-3.14, -1.57, 0.5236] # in radians
     ModuleJointUpperLimits = [3.14, 1.57, 2.4086]
     # Joint torque limits
-    ModuleJointTorqueLimit = [2, 2, 2]
+    ModuleJointTorqueLimit = [2, 2, 4]
 
     # Default joint positions for the robot
     DefaultJointPositions = [2.6, -1.57, 2.3] * ModuleNum
@@ -576,6 +576,9 @@ class DualfingerPlate(VecTask):
             "raw_yaw_diff": yaw_diff,
             "distance_penalty_avg": dis_weighted,
             "yaw_penalty_avg": yaw_weighted,
+            "fingertip_below_thresh_reward": fingertip_below_reward,
+            "plate_moving_reward": plate_moving_reward,
+            "plate_rotating_reward": plate_rotating_reward,
             "reward_avg": self.rew_buf
         }
 

@@ -13,38 +13,38 @@
   <link name="base"/>
   <link name="front">
     <visual>
-      <origin xyz="0 0.1 0.005"/>
+      <origin xyz="0 0.075 0.003"/>
       <geometry>
-        <box size="0.4 0.2 0.01"/>
+        <box size="0.3 0.15 0.006"/>
       </geometry>
       <material name="front_material"/>
     </visual>
     <collision>
-      <origin xyz="0 0.1 0.005"/>
+      <origin xyz="0 0.075 0.003"/>
       <geometry>
-        <box size="0.4 0.2 0.01"/>
+        <box size="0.3 0.15 0.006"/>
       </geometry>
     </collision>
     <inertial>
-      <density value="1000"/>
+      <mass value="0.5"/>
     </inertial>
   </link>
   <link name="rear">
     <visual>
-      <origin xyz="0 -0.1 0.005"/>
+      <origin xyz="0 -0.075 0.003"/>
       <geometry>
-        <box size="0.4 0.2 0.01"/>
+        <box size="0.3 0.15 0.006"/>
       </geometry>
       <material name="rear_material"/>
     </visual>
     <collision>
-      <origin xyz="0 -0.1 0.005"/>
+      <origin xyz="0 -0.075 0.003"/>
       <geometry>
-        <box size="0.4 0.2 0.01"/>
+        <box size="0.3 0.15 0.006"/>
       </geometry>
     </collision>
     <inertial>
-      <density value="1000"/>
+      <mass value="0.5"/>
     </inertial>
   </link>
   <joint name="front_joint" type="fixed">
