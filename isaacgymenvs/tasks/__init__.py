@@ -29,8 +29,10 @@
 
 
 from tasks.quadfinger_plate import QuadfingerPlate
+from tasks.dualfinger_plate import DualfingerPlate
 
 # Mappings from strings to environments
 isaacgym_task_map = {
     "QuadfingerPlate": QuadfingerPlate,
+    "DualfingerPlate": DualfingerPlate,
 }
