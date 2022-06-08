@@ -3,7 +3,7 @@
     <!--Import parts from xacro file-->
     <xacro:include filename="module.urdf.xacro"/>
 
-    <xacro:property name="radius" value="0.1"/>
+    <xacro:property name="radius" value="0.2"/>
 
     <link name="dummy">
         <inertial>

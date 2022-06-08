@@ -273,9 +273,9 @@ class DualfingerPlate(VecTask):
 
         robot_props = self.gym.get_asset_rigid_shape_properties(robot_asset)
         for p in robot_props:
-            p.friction = 1.0
-            p.torsion_friction = 1.0
-            p.restitution = 0.8
+            p.friction = 1.8
+            p.torsion_friction = 0.001
+            p.restitution = 0.0
         self.gym.set_asset_rigid_shape_properties(robot_asset, robot_props)   
 
         for tip_frame in self.FingertipFrameNames:
@@ -295,7 +295,7 @@ class DualfingerPlate(VecTask):
         
         plate_props = self.gym.get_asset_rigid_shape_properties(plate_asset)
         for p in plate_props:
-            p.friction = 0.8
+            p.friction = 0.5
             p.torsion_friction = 0.001
             p.restitution = 0.0
         

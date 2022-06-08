@@ -10,7 +10,7 @@ env:
 
   numEnvs: ${resolve_default:16384,${...num_envs}}
 
-  episodeLength: 750
+  episodeLength: 1000
 
   clipObservations: 5.0
   clipActions: 1.0
@@ -35,8 +35,8 @@ env:
   reward_weight:
     dis_weight: -2
     yaw_weight: -1
-    plate_moving_weight: 100000
-    plate_rotating_weight: 100000
+    plate_moving_weight: 100
+    plate_rotating_weight: 100
     z_value_thresh: 0.04 # Can receive reward if one fingertip is below this value
     z_value_reward: 0.0 # For each fingertip that is below threshold
 
@@ -70,7 +70,7 @@ sim:
 task:
   randomize: True
   randomization_params:
-    frequency: 750   # Define how many simulation steps between generating new randomizations
+    frequency: 1000   # Define how many simulation steps between generating new randomizations
     observations:
       range: [0, .002] # range for the white noise
       range_correlated: [0, .000 ] # range for correlated noise, refreshed with freq `frequency`
@@ -118,7 +118,7 @@ task:
           # schedule_steps: 30000
         rigid_body_properties:
           mass:
-            range: [0.8, 1.2]
+            range: [0.9, 1.1]
             operation: "scaling"
             distribution: "uniform"
             setup_only: True # Property will only be randomized once before simulation is started. See Domain Randomization Documentation for more info.

@@ -26,7 +26,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.5"/>
+      <mass value="0.1"/>
     </inertial>
   </link>
   <link name="rear">
@@ -44,7 +44,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.5"/>
+      <mass value="0.1"/>
     </inertial>
   </link>
   <joint name="front_joint" type="fixed">
