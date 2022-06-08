@@ -35,8 +35,8 @@ env:
   reward_weight:
     dis_weight: -2
     yaw_weight: -1
-    plate_moving_weight: 100
-    plate_rotating_weight: 100
+    plate_moving_weight: 0
+    plate_rotating_weight: 0
     z_value_thresh: 0.04 # Can receive reward if one fingertip is below this value
     z_value_reward: 0.0 # For each fingertip that is below threshold
 
