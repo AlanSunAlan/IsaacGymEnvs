@@ -44,7 +44,7 @@ class DualfingerPlate(VecTask):
     ModuleJointLowerLimits = [-3.14, -1.57, 0.5236] # in radians
     ModuleJointUpperLimits = [3.14, 1.57, 2.4086]
     # Joint torque limits
-    ModuleJointTorqueLimit = [2, 2, 4]
+    ModuleJointTorqueLimit = [2, 2, 5]
 
     # Default joint positions for the robot
     DefaultJointPositions = [2.6, -1.57, 2.3] * ModuleNum

@@ -19,7 +19,7 @@
   <joint name="z_offset" type="fixed">
     <parent link="dummy"/>
     <child link="z_offset_link"/>
-    <origin rpy="0 0 0" xyz="0 0 0.33"/>
+    <origin rpy="0 0 0" xyz="0 0 0.30"/>
   </joint>
   <!-->
 
