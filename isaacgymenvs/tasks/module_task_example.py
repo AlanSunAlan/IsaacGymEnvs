@@ -43,15 +43,13 @@ class ModuleTaskExample(ModuleTask):
             self._vel_weight,
             self._deviation_weight
         )
-
-        print("Vel: ", self.robot_root_tensor_buf[0, 7:10])
         
         rew_info = {
             "TotalReward": self.rew_buf,
             "HeadingVelocityReward": heading_vel_reward,
             "DeviationVelocityPenelty": deviation_vel_penalty
         }
-        print(rew_info)
+        
         self.extras.update({"env/rewards/"+k: v.mean() for k, v in rew_info.items()})
 
 
