@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--Import parts from xacro file-->
+    
+   
+
+    <xacro:property name="length" value="0.01"/>
+    <xacro:property name="width" value="0.08"/>
+
+    <link name="dummy">
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+    </link>
+
+    <link name="z_offset_link">
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+        </inertial>
+    </link>
+
+    <joint name="z_offset" type="fixed">
+        <parent link="dummy"/>
+        <child link="z_offset_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-->
+
+    right   foot 0   <- length ->  foot 1 
+    front    <width>
+    left    foot 2                 foot 3
+    <-->
+    <xacro:include filename="../module_xacro/overconstrained_right.urdf.xacro"/>
+    <xacro:module_overconstrained_right module_prefix="1" parent_link="z_offset_link">
+        <origin xyz="${width/2.0} ${length/-2.0} 0" rpy="${PI/2.0} ${3.0*PI/4.0} 0"/>
+    </xacro:module_overconstrained_right>
+
+    <xacro:module_overconstrained_right module_prefix="0" parent_link="z_offset_link">
+        <origin xyz="${width/2.0} ${length/2.0} 0" rpy="${PI/-2.0} ${PI/-4.0} 0"/>
+    </xacro:module_overconstrained_right>
+
+    <xacro:include filename="../module_xacro/overconstrained_left.urdf.xacro"/>
+    <xacro:module_overconstrained_left module_prefix="3"  parent_link="z_offset_link">
+        <origin xyz="${width/-2.0} ${length/-2.0} 0" rpy="${PI/2.0} ${3.0*PI/-4.0} 0"/>
+    </xacro:module_overconstrained_left>
+
+    <xacro:module_overconstrained_left module_prefix="2"  parent_link="z_offset_link">
+        <origin xyz="${width/-2.0} ${length/2.0} 0" rpy="${PI/-2.0} ${PI/4.0} 0"/>
+    </xacro:module_overconstrained_left>  
+
+    <link name="robot_base">
+        <visual>
+            <origin xyz="0 0 0"/>
+            <geometry>
+                <box size="0.16 0.01 0.08"/>
+            </geometry>
+        </visual>
+        <collision>
+                <origin xyz="0 0 0"/>
+            <geometry>
+                <box size="0.16 0.01 0.08"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="0.2"/>
+        </inertial>
+    </link>
+
+    <joint name="world_to_robot_base" type="fixed">
+        <child link="robot_base"/>
+        <parent link="z_offset_link"/>
+    </joint>
+
+</robot>
