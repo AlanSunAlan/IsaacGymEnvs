@@ -368,18 +368,21 @@ class ModuleTask(VecTask):
         custom_obs_limits.low = torch.tensor(custom_obs_limits.low, dtype=torch.float32, device=self.device)
         custom_obs_limits.high = torch.tensor(custom_obs_limits.high, dtype=torch.float32, device=self.device)
 
+        action_lower_limit = -1*torch.ones(self._num_modules * self._num_dof_per_module, dtype=torch.float32, device=self.device)
+        action_upper_limit = torch.ones(self._num_modules * self._num_dof_per_module, dtype=torch.float32, device=self.device)
+
         # Combine all limits
         self.obs_lower_limit = torch.cat((joint_angle_limit.low,
                                           joint_velocity_limit.low,
                                           tip_state_limit.low,
                                           custom_obs_limits.low,
-                                          self._action_lower), 0)
+                                          action_lower_limit), 0)
 
         self.obs_upper_limit = torch.cat((joint_angle_limit.high,
                                           joint_velocity_limit.high,
                                           tip_state_limit.high,
                                           custom_obs_limits.high,
-                                          self._action_upper), 0)
+                                          action_upper_limit), 0)
 
         self.state_lower_limit = self.obs_lower_limit
         self.state_upper_limit = self.obs_upper_limit
