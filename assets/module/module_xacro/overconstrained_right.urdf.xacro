@@ -259,6 +259,18 @@
             <origin xyz="-0.004243 -0.127 -0.005243" rpy="0 0 0"/>
         </joint>
 
+        <link name="${module_prefix}-knee_frame">
+            <geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </geometry>
+        </link>
+
+        <joint name="${module_prefix}-knee_frame_fix" type="fixed">
+            <parent link="${module_prefix}-finger2"/>
+            <child link="${module_prefix}-knee_frame"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </joint>
+
     </xacro:macro>
 
 </robot>

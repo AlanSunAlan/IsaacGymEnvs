@@ -10,7 +10,7 @@ env:
 
   numEnvs: ${resolve_default:16384,${...num_envs}}
 
-  episodeLength: 200
+  episodeLength: 2000
 
   clipObservations: 5.0
   clipActions: 1.0
@@ -33,15 +33,19 @@ env:
       type: default
 
   reward_weight:
+    falling_height: 0.05
     baseline_vel: 0.01
+    baseline_knee_z: 0.02
     vel_weight: 2
-    deviation_weight: -4
+    deviation_weight: -2
+    knee_touch_ground_penalty: -1
+    falling_penalty: -1 # The penalty given for each timestep
 
   # set to True if you use camera sensors in the environment
   enableCameraSensors: False
 
 sim:
-  dt: 0.01
+  dt: 0.02
   substeps: 4
   up_axis: z
   use_gpu_pipeline: ${eq:${...pipeline},"gpu"}
@@ -87,7 +91,7 @@ module:
     max_joint_vel: [3, 3, 3] # maximum joint velocities in rad/s
     joint_lower: [-0.785, 0.785, -2.4086, -2.355, -2.355, -2.4086, -2.355, -2.355, 0.5236, -0.785, 0.785, 0.5236] # Lower limit for the joint angles in rad
     joint_upper: [2.355, 2.355, -0.5236, 0.785, -0.785, -0.5236, 0, -0.785, 2.4086, 2.355, 2.355, 2.4086] # Upper limit for the joint angles in rad
-    joint_torque_limit: [3,3,9] # Maximum joint torque in N*m
+    joint_torque_limit: [5,5,9] # Maximum joint torque in N*m
     default_joint_positions: [1.7, 0.785, -1.7, -1.7, -2.355, -1.7, -1.7, -0.785, 1.7, 1.7, 2.355, 1.7] # Default joint angles in rad
   asset_options:
     use_physx_armature: True

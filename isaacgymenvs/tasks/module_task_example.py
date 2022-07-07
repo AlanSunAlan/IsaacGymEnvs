@@ -15,16 +15,24 @@ class ModuleTaskExample(ModuleTask):
         self.cfg = cfg
         self.sim_device = sim_device
 
+        self.max_episode_length = self.cfg["env"]["episodeLength"]
+
         # get some configs that are helpful in this class
+        self._falling_height = cfg['env']['reward_weight']['falling_height']
         self._vel_weight = cfg['env']['reward_weight']['vel_weight']
         self._baseline_vel = cfg['env']['reward_weight']['baseline_vel']
+        self._baseline_knee_z = cfg['env']['reward_weight']['baseline_knee_z']
         self._deviation_weight = cfg['env']['reward_weight']['deviation_weight']
+        self._knee_touch_ground_weight = cfg['env']['reward_weight']['knee_touch_ground_penalty']
+        self._falling_penalty = cfg['env']['reward_weight']['falling_penalty']
 
         # Create your assets here
         ## Nothing is done here, no need to create custom assets
 
         # Config your observations here
         ## No need for other observations
+
+        self.add_obs(4, [0]*4, [0.12]*4, self.get_knee_z_values)
 
         super().__init__(self.cfg, self.sim_device, graphics_device_id, headless)
 
@@ -33,28 +41,58 @@ class ModuleTaskExample(ModuleTask):
         # Deviation direction, the direction that is perpendicular to heading direction
         self.deviation_direction = torch.tensor([1, 0, 0], dtype=torch.float32, device=self.device).repeat(self.num_envs, 1)
 
+    def check_termination(self):
+        body_z_position = self.get_robot_root_tensor()[:, 2]
+        
+        # Reset the robot if it falls 
+        falling_indices = (body_z_position < self._falling_height).nonzero()
+        if len(falling_indices) > 0:
+            self.reset_buf[falling_indices] = 1
+
+            # Add falling penelty for those robots fallen
+            ## The penalty will be equal to the falling_penalty * timesteps_left
+            self.rew_buf[falling_indices] += (-1*self.progress_buf[falling_indices] + self.max_episode_length) * self._falling_penalty
+
+        # Reset robot if any one of its knees touch the ground
+        knee_z_values = self.get_knee_z_values()
+        knee_touching = torch.where(knee_z_values < self._baseline_knee_z, torch.ones_like(knee_z_values), torch.zeros_like(knee_z_values))
+        knee_flat = torch.sum(knee_touching, 1)
+        knee_reset_indices = (knee_flat > 0).nonzero() # The indices where one of its knees falls
+        if len(knee_reset_indices) > 0:
+            self.reset_buf[knee_reset_indices] = 1
+
+            # Add touching ground penalty
+            ## The penalty will be equal to the touching_penalty * timesteps_left
+            self.rew_buf[knee_reset_indices] += (-1*self.progress_buf[knee_reset_indices] + self.max_episode_length) * self._knee_touch_ground_weight
+
+        print(knee_reset_indices)
+
+        return super().check_termination()
+
     def compute_reward(self):
         self.robot_root_tensor_buf = self.get_robot_root_tensor()
-        self.rew_buf[:], heading_vel_reward, deviation_vel_penalty = _compute_obs(
+        self.rew_buf[:], heading_vel_reward, deviation_vel_penalty = _compute_rew(
             self.robot_root_tensor_buf,
             self.heading_direction,
             self.deviation_direction,
             self._baseline_vel,
             self._vel_weight,
-            self._deviation_weight
+            self._deviation_weight,
         )
         
         rew_info = {
             "TotalReward": self.rew_buf,
             "HeadingVelocityReward": heading_vel_reward,
-            "DeviationVelocityPenelty": deviation_vel_penalty
+            "DeviationVelocityPenelty": deviation_vel_penalty,
         }
         
         self.extras.update({"env/rewards/"+k: v.mean() for k, v in rew_info.items()})
 
+    def get_knee_z_values(self):
+        return self.knee_states[:, :, 2]
 
 @torch.jit.script
-def _compute_obs(robot_root_tensor: torch.Tensor,
+def _compute_rew(robot_root_tensor: torch.Tensor,
                  heading_direction: torch.Tensor,
                  deviation_direction: torch.Tensor,
                  baseline_vel: float,
@@ -70,6 +108,7 @@ def _compute_obs(robot_root_tensor: torch.Tensor,
 
     heading_vel_reward = flat_heading_vel * vel_weight
     deviation_vel_penalty = flat_deviation_vel * deviation_weight
+
     total_reward = heading_vel_reward + deviation_vel_penalty
 
     return total_reward, heading_vel_reward, deviation_vel_penalty

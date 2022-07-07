@@ -81,18 +81,22 @@ class ModuleTask(VecTask):
         # Module asset options
         self._module_asset_config = self._module_cfg['asset_options']
 
+        # Knee frame names
+        self._knee_frame_names = []
         # Fingertip frame names
         self._fingertip_frame_names = []
-        # Finger
         for prefix in self._prefix_list:
             self._fingertip_frame_names.append("{}-fingertip_frame".format(prefix))
+            self._knee_frame_names.append("{}-knee_frame".format(prefix))
         self._fingertip_indices = []
+        self._knee_indices = []
 
         # Custom asset_list
         self._custom_asset_list = []
 
         # Configure observations
-        self._custom_obs_list = []
+        if not hasattr(self, '_custom_obs_list'):
+            setattr(self, '_custom_obs_list', [])
         self._enable_tip_obs = self._module_cfg['observations']['enable_tip_obs']
         if self._enable_tip_obs:
             self._tip_pos_lower = self._module_cfg['observations']['tip_position_lower']
@@ -295,8 +299,8 @@ class ModuleTask(VecTask):
         
         robot_props = self.gym.get_asset_rigid_shape_properties(robot_asset)
         for p in robot_props:
-            p.friction = 1.0
-            p.torsion_friction = 1.0
+            p.friction = 3
+            p.torsion_friction = 3.0
             p.restitution = 0.8
         self.gym.set_asset_rigid_shape_properties(robot_asset, robot_props)   
 
@@ -304,6 +308,13 @@ class ModuleTask(VecTask):
             self._fingertip_indices.append(self.gym.find_asset_rigid_body_index(robot_asset, tip_frame))
             if self._fingertip_indices[-1] == gymapi.INVALID_HANDLE:
                 print("Invalid handle for {}".format(tip_frame))
+                exit(1)
+
+        for knee_frame in self._knee_frame_names:
+            self._knee_indices.append(self.gym.find_asset_rigid_body_index(robot_asset, knee_frame))
+            if self._knee_indices[-1] == gymapi.INVALID_HANDLE:
+                print("Invalid handle for {}".format(knee_frame))
+                exit(1)
 
         return robot_asset
 
@@ -362,8 +373,8 @@ class ModuleTask(VecTask):
             high=[]
         )
         for custom_obs in self._custom_obs_list:
-            custom_obs_limits.low.append(custom_obs.lower)
-            custom_obs_limits.low.append(custom_obs.upper)
+            custom_obs_limits.low += custom_obs.lower
+            custom_obs_limits.high += custom_obs.upper
         # Convert custom observation limit to tensor
         custom_obs_limits.low = torch.tensor(custom_obs_limits.low, dtype=torch.float32, device=self.device)
         custom_obs_limits.high = torch.tensor(custom_obs_limits.high, dtype=torch.float32, device=self.device)
@@ -442,10 +453,10 @@ class ModuleTask(VecTask):
         # Calculate observations
         tip_states = torch.tensor([], dtype=torch.float32, device=self.device)
         if self._enable_tip_obs:
-            tip_states = self.rb_state_tensor[:, self._fingertip_indices].view(-1, self._num_modules*13)
+            tip_states = self.fingertip_states.view(-1, self._num_modules*13)
         custom_obs_tensors = torch.tensor([], dtype=torch.float32, device=self.device)
         for custom_obs in self._custom_obs_list:
-            custom_obs_tensors = torch.cat((custom_obs_tensors, custom_obs.tensor_ref), dim=-1)
+            custom_obs_tensors = torch.cat((custom_obs_tensors, custom_obs.tensor_ref()), dim=-1)
 
         self.obs_buf[:], self.states_buf[:] = aggregate_obs_state(
             self.dof_positions,
@@ -585,7 +596,16 @@ class ModuleTask(VecTask):
             Note: lower and upper is for the tensor of size 1D.
             (effective for all envs, do not need to be in size (num_env, obs_tensor))
         '''
+        # If the list is not created, create one
+        if not hasattr(self, '_custom_obs_list'):
+            setattr(self, '_custom_obs_list', [])
         self._custom_obs_list.append(Observation(length, lower, upper, tensor_ref))
+
+    def get_fingertip_states(self):
+        return self.rb_state_tensor[:, self._fingertip_indices]
+
+    def get_knee_states(self):
+        return self.rb_state_tensor[:, self._knee_indices]
 
     @property
     def robot_root_tensor(self):
@@ -598,6 +618,14 @@ class ModuleTask(VecTask):
     @property
     def dof_velocities(self):
         return self.dof_state_tensor[:,:,1]
+
+    @property
+    def fingertip_states(self):
+        return self.rb_state_tensor[:, self._fingertip_indices]
+
+    @property
+    def knee_states(self):
+        return self.rb_state_tensor[:, self._knee_indices]
 
     @abstractmethod
     def compute_reward(self):

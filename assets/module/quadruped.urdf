@@ -235,6 +235,16 @@
     <child link="1-fingertip_frame"/>
     <origin rpy="0 0 0" xyz="-0.004243 -0.127 -0.005243"/>
   </joint>
+  <link name="1-knee_frame">
+    <geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </geometry>
+  </link>
+  <joint name="1-knee_frame_fix" type="fixed">
+    <parent link="1-finger2"/>
+    <child link="1-knee_frame"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
   <link name="0-xm430_0">
     <inertial>
       <origin rpy="0 0 0" xyz="-4.0773796e-3 -1.5304911e-2 -1.6871895e-2"/>
@@ -447,6 +457,16 @@
     <parent link="0-finger2"/>
     <child link="0-fingertip_frame"/>
     <origin rpy="0 0 0" xyz="-0.004243 -0.127 -0.005243"/>
+  </joint>
+  <link name="0-knee_frame">
+    <geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </geometry>
+  </link>
+  <joint name="0-knee_frame_fix" type="fixed">
+    <parent link="0-finger2"/>
+    <child link="0-knee_frame"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
   <link name="3-xm430_0">
     <inertial>
@@ -661,6 +681,16 @@
     <child link="3-fingertip_frame"/>
     <origin rpy="0 0 0" xyz="0.004243 -0.127 -0.005243"/>
   </joint>
+  <link name="3-knee_frame">
+    <geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </geometry>
+  </link>
+  <joint name="3-knee_frame_fix" type="fixed">
+    <parent link="3-finger2"/>
+    <child link="3-knee_frame"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
   <link name="2-xm430_0">
     <inertial>
       <origin rpy="0 0 0" xyz="-4.0773796e-3 -1.5304911e-2 -1.6871895e-2"/>
@@ -873,6 +903,16 @@
     <parent link="2-finger2"/>
     <child link="2-fingertip_frame"/>
     <origin rpy="0 0 0" xyz="0.004243 -0.127 -0.005243"/>
+  </joint>
+  <link name="2-knee_frame">
+    <geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </geometry>
+  </link>
+  <joint name="2-knee_frame_fix" type="fixed">
+    <parent link="2-finger2"/>
+    <child link="2-knee_frame"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
   <link name="robot_base">
     <visual>
