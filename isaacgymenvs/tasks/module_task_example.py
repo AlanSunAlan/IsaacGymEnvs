@@ -65,8 +65,6 @@ class ModuleTaskExample(ModuleTask):
             ## The penalty will be equal to the touching_penalty * timesteps_left
             self.rew_buf[knee_reset_indices] += (-1*self.progress_buf[knee_reset_indices] + self.max_episode_length) * self._knee_touch_ground_weight
 
-        print(knee_reset_indices)
-
         return super().check_termination()
 
     def compute_reward(self):

@@ -70,7 +70,7 @@ sim:
 
 module:
   # Folder that containing the meshes and urdf files
-  asset_folder: "/home/bionicdl-sun/SHR/IsaacGymEnvs/assets/"
+  asset_folder: "../assets/"
   # Name of the robot urdf file
   robot_urdf_name: "module/quadruped.urdf"
   num_modules: 4 # the number of modules used in the robot
