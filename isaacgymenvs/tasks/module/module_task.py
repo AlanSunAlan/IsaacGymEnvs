@@ -94,7 +94,6 @@ class ModuleTask(VecTask):
         # Custom asset_list
         if not hasattr(self, '_custom_asset_list'):
             setattr(self, '_custom_asset_list', [])
-        self._custom_asset_list = []
 
         # Configure observations
         if not hasattr(self, '_custom_obs_list'):
@@ -105,6 +104,8 @@ class ModuleTask(VecTask):
             self._tip_pos_upper = self._module_cfg['observations']['tip_position_upper']
             self._tip_vel_lower = self._module_cfg['observations']['tip_vel_lower']
             self._tip_vel_upper = self._module_cfg['observations']['tip_vel_upper']
+            self._tip_angular_vel_lower = self._module_cfg['observations']['tip_angular_vel_lower']
+            self._tip_angular_vel_upper = self._module_cfg['observations']['tip_angular_vel_upper']
         # Compute number of observations
         self.cfg["env"]["numObservations"] = 0
         for obs in self._custom_obs_list:
@@ -113,7 +114,7 @@ class ModuleTask(VecTask):
         self.cfg["env"]["numObservations"] += self._num_modules * self._num_dof_per_module
         if self._enable_tip_obs:
             # Add the tip state observations
-            self.cfg["env"]["numObservations"] += 3 + 4 + 3 # Position, quaternion, linear velocity
+            self.cfg["env"]["numObservations"] += (3 + 4 + 3 + 3) * self._num_modules # Position, quaternion, linear velocity, angular velocity
 
         self.cfg["env"]["numStates"] = self.cfg["env"]["numObservations"]
         self.cfg["env"]["numActions"] = self._num_modules * self._num_dof_per_module
@@ -195,6 +196,9 @@ class ModuleTask(VecTask):
 
         # Load other assets
         asset_list = self._custom_asset_list
+        # Setup asset indices
+        for _asset in asset_list:
+            self._env_obj_indices[_asset.asset_name] = []
 
         env_lower_bound = gymapi.Vec3(-self.cfg["env"]["envSpacing"], -self.cfg["env"]["envSpacing"], 0.0)
         env_upper_bound = gymapi.Vec3(self.cfg["env"]["envSpacing"], self.cfg["env"]["envSpacing"], self.cfg["env"]["envSpacing"])
@@ -352,8 +356,8 @@ class ModuleTask(VecTask):
             )
 
             tip_velocity_limit = SimpleNamespace(
-                low=torch.tensor(self._tip_vel_lower, dtype=torch.float32, device=self.device),
-                high=torch.tensor(self._tip_vel_upper, dtype=torch.float32, device=self.device),
+                low=torch.tensor(self._tip_vel_lower + self._tip_angular_vel_lower, dtype=torch.float32, device=self.device),
+                high=torch.tensor(self._tip_vel_upper + self._tip_angular_vel_upper, dtype=torch.float32, device=self.device),
             )
 
             tip_state_limit = SimpleNamespace(
@@ -480,6 +484,8 @@ class ModuleTask(VecTask):
             upper=self.state_upper_limit
         )
 
+        print(self.obs_buf[0])
+
     def check_termination(self):
         '''
             Only provide termination mechanism where the task ends when
@@ -534,6 +540,7 @@ class ModuleTask(VecTask):
                               orientation: torch.Tensor,
                               linear_vel: torch.Tensor=torch.tensor([0,0,0],dtype=torch.float32),
                               angular_vel: torch.Tensor=torch.tensor([0,0,0],dtype=torch.float32)) -> None:
+        num_reset = len(reset_env_ids)
         obj_indices = self._env_obj_indices[obj_name]
         obj_reset_indices = obj_indices[reset_env_ids]
 
@@ -541,8 +548,11 @@ class ModuleTask(VecTask):
         self._reset_indices = torch.cat((self._reset_indices, obj_reset_indices))
 
         # Combine the state tensors into one
-        linear_vel = linear_vel.to(self.device)
-        angular_vel = linear_vel.to(self.device)
+        if linear_vel.shape[0] != num_reset:
+            linear_vel = linear_vel.repeat(num_reset, 1).to(self.device)
+        if angular_vel.shape[0] != num_reset:
+            angular_vel = angular_vel.repeat(num_reset, 1).to(self.device)
+
         state_tensor = torch.cat((
             position,
             orientation,
