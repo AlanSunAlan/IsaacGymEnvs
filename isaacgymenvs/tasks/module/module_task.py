@@ -484,8 +484,6 @@ class ModuleTask(VecTask):
             upper=self.state_upper_limit
         )
 
-        print(self.obs_buf[0])
-
     def check_termination(self):
         '''
             Only provide termination mechanism where the task ends when
