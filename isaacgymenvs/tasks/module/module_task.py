@@ -195,7 +195,15 @@ class ModuleTask(VecTask):
         robot_dof_props['velocity'] = self._module_control_params['max_joint_vel']
 
         # Load other assets
-        asset_list = self._custom_asset_list
+        asset_list = []
+        # Replace the assets with explicit reference
+        for _asset in self._custom_asset_list:
+            new_asset = Asset(_asset.asset_name,
+                              _asset.asset(),
+                              _asset.collision_with_robot,
+                              _asset.filter)
+            asset_list.append(new_asset)
+
         # Setup asset indices
         for _asset in asset_list:
             self._env_obj_indices[_asset.asset_name] = []
@@ -212,8 +220,8 @@ class ModuleTask(VecTask):
         max_agg_shapes += self.gym.get_asset_rigid_shape_count(robot_module_asset)
         # For all other assets
         for _asset in asset_list:
-            max_agg_bodies += self.gym.get_asset_rigid_body_count(_asset.asset())
-            max_agg_shapes += self.gym.get_asset_rigid_shape_count(_asset.asset())
+            max_agg_bodies += self.gym.get_asset_rigid_body_count(_asset.asset)
+            max_agg_shapes += self.gym.get_asset_rigid_shape_count(_asset.asset)
 
         # Aggregate actors in each environment
         for env_i in range(0, self.num_envs):
@@ -241,7 +249,7 @@ class ModuleTask(VecTask):
 
             # Add all other assets
             for _asset in asset_list:
-                obj_asset = _asset.asset()
+                obj_asset = _asset.asset
                 asset_name = _asset.asset_name
                 _filter = _asset.filter
                 if _asset.collision_with_robot:
