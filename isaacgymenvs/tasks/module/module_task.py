@@ -92,6 +92,8 @@ class ModuleTask(VecTask):
         self._knee_indices = []
 
         # Custom asset_list
+        if not hasattr(self, '_custom_asset_list'):
+            setattr(self, '_custom_asset_list', [])
         self._custom_asset_list = []
 
         # Configure observations
@@ -206,8 +208,8 @@ class ModuleTask(VecTask):
         max_agg_shapes += self.gym.get_asset_rigid_shape_count(robot_module_asset)
         # For all other assets
         for _asset in asset_list:
-            max_agg_bodies += self.gym.get_asset_rigid_body_count(_asset.asset)
-            max_agg_shapes += self.gym.get_asset_rigid_shape_count(_asset.asset)
+            max_agg_bodies += self.gym.get_asset_rigid_body_count(_asset.asset())
+            max_agg_shapes += self.gym.get_asset_rigid_shape_count(_asset.asset())
 
         # Aggregate actors in each environment
         for env_i in range(0, self.num_envs):
@@ -235,7 +237,7 @@ class ModuleTask(VecTask):
 
             # Add all other assets
             for _asset in asset_list:
-                obj_asset = _asset.asset
+                obj_asset = _asset.asset()
                 asset_name = _asset.asset_name
                 _filter = _asset.filter
                 if _asset.collision_with_robot:
@@ -576,6 +578,9 @@ class ModuleTask(VecTask):
 
             filter: corresponding to the paremeter <filter> in isaacgym.gymapi.Gym.create_actor
         '''
+        # If the list is not created, create one
+        if not hasattr(self, '_custom_asset_list'):
+            setattr(self, '_custom_asset_list', [])
         self._custom_asset_list.append(Asset(asset_name,
                                        asset,
                                        collision_with_robot,

@@ -65,7 +65,7 @@
             </geometry>
         </collision>
         <inertial>
-            <mass value="0.2"/>
+            <mass value="0.4"/>
         </inertial>
     </link>
 

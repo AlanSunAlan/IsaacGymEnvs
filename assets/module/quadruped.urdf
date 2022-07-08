@@ -928,7 +928,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.2"/>
+      <mass value="0.4"/>
     </inertial>
   </link>
   <joint name="world_to_robot_base" type="fixed">
