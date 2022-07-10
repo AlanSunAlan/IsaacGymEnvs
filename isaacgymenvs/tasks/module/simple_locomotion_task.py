@@ -27,7 +27,6 @@ class SimpleLocomotionTask(ModuleTask):
         self._deviation_weight = cfg['locomotion']['reward_weight']['deviation_weight']
         self._knee_touch_ground_weight = cfg['locomotion']['reward_weight']['knee_touch_ground_penalty']
         self._falling_penalty = cfg['locomotion']['reward_weight']['falling_penalty']
-        self._movement_penalty = cfg['locomotion']['reward_weight']['movement_penalty']
 
         self.add_obs(4, [0]*4, [0.12]*4, self.get_knee_z_values)
 
@@ -66,22 +65,19 @@ class SimpleLocomotionTask(ModuleTask):
 
     def compute_reward(self):
         self.robot_root_tensor_buf = self.get_robot_root_tensor()
-        self.rew_buf[:], heading_vel_reward, deviation_vel_penalty, movement_penalty_sums = _compute_rew(
+        self.rew_buf[:], heading_vel_reward, deviation_vel_penalty = _compute_rew(
             self.robot_root_tensor_buf,
-            self.dof_velocities,
             self.heading_direction,
             self.deviation_direction,
             self._baseline_vel,
             self._vel_weight,
-            self._deviation_weight,
-            self._movement_penalty
+            self._deviation_weight
         )
     
         rew_info = {
             "TotalReward": self.rew_buf,
             "HeadingVelocityReward": heading_vel_reward,
             "DeviationVelocityPenelty": deviation_vel_penalty,
-            "MovementPenalty": movement_penalty_sums
         }
 
         self.extras.update({"env/rewards/"+k: v.mean() for k, v in rew_info.items()})
@@ -91,13 +87,11 @@ class SimpleLocomotionTask(ModuleTask):
 
 @torch.jit.script
 def _compute_rew(robot_root_tensor: torch.Tensor,
-                 dof_velocities: torch.Tensor,
                  heading_direction: torch.Tensor,
                  deviation_direction: torch.Tensor,
                  baseline_vel: float,
                  vel_weight: float,
-                 deviation_weight: float,
-                 movement_penalty: float) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+                 deviation_weight: float) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     robot_world_vel = robot_root_tensor[:, 7:10]
     heading_vel = torch.mul(heading_direction, robot_world_vel)
     flat_raw_heading_vel = torch.sum(heading_vel, 1)
@@ -110,9 +104,6 @@ def _compute_rew(robot_root_tensor: torch.Tensor,
     heading_vel_reward = flat_heading_vel * vel_weight
     deviation_vel_penalty = flat_deviation_vel * deviation_weight
 
-    # movement penalty; prevent robot from doing motions that are difficult in real
-    movement_penalty_sums = movement_penalty * dof_velocities.pow(2).sum(dim=-1)
+    total_reward = heading_vel_reward + deviation_vel_penalty
 
-    total_reward = heading_vel_reward + deviation_vel_penalty + movement_penalty_sums
-
-    return total_reward, heading_vel_reward, deviation_vel_penalty, movement_penalty_sums
+    return total_reward, heading_vel_reward, deviation_vel_penalty
