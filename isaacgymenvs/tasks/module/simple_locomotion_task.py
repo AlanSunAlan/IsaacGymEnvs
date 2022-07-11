@@ -37,6 +37,8 @@ class SimpleLocomotionTask(ModuleTask):
         # Deviation direction, the direction that is perpendicular to heading direction
         self.deviation_direction = torch.tensor([1, 0, 0], dtype=torch.float32, device=self.device).repeat(self.num_envs, 1)
 
+        self.rew_info = dict()
+
     def check_termination(self):
         body_z_position = self.get_robot_root_tensor()[:, 2]
         
@@ -66,6 +68,7 @@ class SimpleLocomotionTask(ModuleTask):
     def compute_reward(self):
         self.robot_root_tensor_buf = self.get_robot_root_tensor()
         self.rew_buf[:], heading_vel_reward, deviation_vel_penalty = _compute_rew(
+            self.rew_buf,
             self.robot_root_tensor_buf,
             self.heading_direction,
             self.deviation_direction,
@@ -74,19 +77,18 @@ class SimpleLocomotionTask(ModuleTask):
             self._deviation_weight
         )
     
-        rew_info = {
-            "TotalReward": self.rew_buf,
-            "HeadingVelocityReward": heading_vel_reward,
-            "DeviationVelocityPenelty": deviation_vel_penalty,
-        }
+        self.rew_info["TotalReward"] = self.rew_buf
+        self.rew_info["HeadingVelocityReward"] = heading_vel_reward
+        self.rew_info["DeviationVelocityPenelty"] = deviation_vel_penalty
 
-        self.extras.update({"env/rewards/"+k: v.mean() for k, v in rew_info.items()})
+        self.extras.update({"env/rewards/"+k: v.mean() for k, v in self.rew_info.items()})
 
     def get_knee_z_values(self):
         return self.knee_states[:, :, 2]
 
 @torch.jit.script
-def _compute_rew(robot_root_tensor: torch.Tensor,
+def _compute_rew(rew_tensor: torch.Tensor,
+                 robot_root_tensor: torch.Tensor,
                  heading_direction: torch.Tensor,
                  deviation_direction: torch.Tensor,
                  baseline_vel: float,
@@ -104,6 +106,6 @@ def _compute_rew(robot_root_tensor: torch.Tensor,
     heading_vel_reward = flat_heading_vel * vel_weight
     deviation_vel_penalty = flat_deviation_vel * deviation_weight
 
-    total_reward = heading_vel_reward + deviation_vel_penalty
+    total_reward = rew_tensor + heading_vel_reward + deviation_vel_penalty
 
     return total_reward, heading_vel_reward, deviation_vel_penalty
