@@ -34,7 +34,9 @@ env:
 
 
 manipulation:
-  reward_weight:
+  winning_angle: 4 # in degree
+  winning_l2: 0.02 # in meters
+  reward_weight: 
     distance_weight: -2
     yaw_weight: -1
 

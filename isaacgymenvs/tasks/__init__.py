@@ -33,6 +33,7 @@ from tasks.dualfinger_plate import DualfingerPlate
 from tasks.module_task_example import ModuleTaskExample
 from tasks.overconstrained_quadruped_locomotion import OverconstrainedQuadrupedLocomotion
 from tasks.overconstrained_quadfinger_plate_manipulation import OverconstrainedQuadfingerPlateManipulation
+from tasks.dualfinger_plate_manipulation import DualfingerPlateManipulation
 
 # Mappings from strings to environments
 isaacgym_task_map = {
@@ -41,4 +42,5 @@ isaacgym_task_map = {
     "ModuleTaskExample": ModuleTaskExample,
     "OverconstrainedQuadrupedLocomotion": OverconstrainedQuadrupedLocomotion,
     "OverconstrainedQuadfingerPlateManipulation": OverconstrainedQuadfingerPlateManipulation,
+    "DualfingerPlateManipulation": DualfingerPlateManipulation,
 }

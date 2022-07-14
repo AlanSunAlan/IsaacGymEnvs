@@ -1,4 +1,4 @@
-name: QuadfingerPlate
+name: SinglefingerTest
 
 physics_engine: ${..physics_engine}
 

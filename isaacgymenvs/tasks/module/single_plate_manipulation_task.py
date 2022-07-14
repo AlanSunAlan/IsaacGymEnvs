@@ -41,6 +41,9 @@ class SinglePlateManipulationTask(ModuleTask):
         # Some useful configs
         self._dis_weight = self.cfg['manipulation']['reward_weight']['distance_weight']
         self._yaw_weight = self.cfg['manipulation']['reward_weight']['yaw_weight']
+        self._winning_angle = self.cfg['manipulation']['winning_angle']
+        self._winning_angle = deg_to_rad(self._winning_angle)
+        self._winning_l2 = self.cfg['manipulation']['winning_l2']
 
         self.add_asset('boundary', self._boundary_asset, True, 1)
         self.add_asset('plate', self._plate_asset, True, 0)
@@ -61,9 +64,6 @@ class SinglePlateManipulationTask(ModuleTask):
         self._goal_plate_2d_states = []
 
     def reset_idx(self, env_ids):
-        plate_angle = 150
-        goal_angle = 0
-
         reset_len = len(env_ids)
 
         # Generate random poses for plate and goal plate
@@ -74,27 +74,16 @@ class SinglePlateManipulationTask(ModuleTask):
         plate_positions = torch.cat((plate_pos_x, plate_pos_y, plate_pos_z), dim=-1)
         plate_quaternions = random_yaw_orientation(reset_len*2, self.device)
 
-        plate_quat = quat_from_euler_xyz(torch.tensor(0), torch.tensor(0), torch.tensor(deg_to_rad(plate_angle))).repeat(reset_len, 1).to(self.device)
-        goal_quat = quat_from_euler_xyz(torch.tensor(0), torch.tensor(0), torch.tensor(deg_to_rad(goal_angle))).repeat(reset_len, 1).to(self.device)
         # Reset plate pose
-        #self.reset_obj_root_tensor(env_ids, 
-        #                          "plate",
-        #                           plate_positions[0:reset_len, :],
-        #                           plate_quaternions[0:reset_len, :])
-        
         self.reset_obj_root_tensor(env_ids, 
                                   "plate",
                                    plate_positions[0:reset_len, :],
-                                   plate_quat[:, :])
+                                   plate_quaternions[0:reset_len, :])
         # Reset goal plate pose
-        #self.reset_obj_root_tensor(env_ids,
-        #                           'goal_plate',
-        #                           plate_positions[reset_len:, :],
-        #                           plate_quaternions[reset_len:, :])
         self.reset_obj_root_tensor(env_ids,
                                    'goal_plate',
                                    plate_positions[reset_len:, :],
-                                   goal_quat[:, :])
+                                   plate_quaternions[reset_len:, :])
 
         return super().reset_idx(env_ids)
 
@@ -119,12 +108,10 @@ class SinglePlateManipulationTask(ModuleTask):
         #print("Raw diff: ", rad_to_deg(yaw_diff))
         #print("Min diff: ", rad_to_deg(min_yaw_diff))
 
-        dis_weighted = self._dis_weight * dis_l2
-        yaw_weighted = self._yaw_weight * min_yaw_diff
+        dis_weighted = self._dis_weight * dis_l2 + -1*self._dis_weight*self._winning_l2
+        yaw_weighted = self._yaw_weight * min_yaw_diff + -1*self._yaw_weight*self._winning_angle
 
         self.rew_buf[:] = dis_weighted + yaw_weighted
-
-        print("Rew: ", self.rew_buf[0])
 
         update_info = {
             "raw_distance_l2": dis_l2,

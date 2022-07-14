@@ -1,4 +1,4 @@
-name: QuadfingerPlate
+name: DualfingerPlateManipulation
 
 physics_engine: ${..physics_engine}
 
@@ -32,16 +32,17 @@ env:
       dof_vel_stddev: 0.2
       type: default
 
-  reward_weight:
-    dis_weight: -2
+
+manipulation:
+  winning_angle: 4 # in degree
+  winning_l2: 0.02 # in meters
+  reward_weight: 
+    distance_weight: -2
     yaw_weight: -1
 
-  # set to True if you use camera sensors in the environment
-  enableCameraSensors: False
-
 sim:
-  dt: 0.005
-  substeps: 1
+  dt: 0.02
+  substeps: 4
   up_axis: z
   use_gpu_pipeline: ${eq:${...pipeline},"gpu"}
   gravity:
@@ -62,6 +63,48 @@ sim:
     max_gpu_contact_pairs: 8388608 # 8*1024*1024
     num_subscenes: ${....num_subscenes}
     contact_collection: 0 # 0: CC_NEVER (don't collect contact info), 1: CC_LAST_SUBSTEP (collect only contacts on last substep), 2: CC_ALL_SUBSTEPS (default - all contacts)
+
+module:
+  # Folder that containing the meshes and urdf files
+  asset_folder: "../assets/"
+  # Name of the robot urdf file
+  robot_urdf_name: "module/dualfinger.urdf"
+  num_modules: 2 # the number of modules used in the robot
+  prefix_list: [0,1]
+  fix_base: True # if the robot base link should be fixed (i.e. for a 
+            # quadruped robot, it should set to False)
+  default_world_position: [0,0,0.3] # Default position for the whole robot
+  default_world_orientation: [0, 0, 0, 1] # Default orientation in quaternion form: x, y, z, w
+
+  control:
+    # a list defining the parameters for each module
+    # Must be in the size of:
+    # (1) 3 if the parameters should be the same for every module
+    # (2) num_modules to set each module seperately
+    stiffness: [1.2, 1.2, 1.2]
+    damping: [0.06, 0.06, 0.06]
+    max_joint_vel: [3, 3, 3] # maximum joint velocities in rad/s
+    joint_lower: [-3.14, -1.57, 0.5236]
+    joint_upper: [3.14, 1.57, 2.4086] # Upper limit for the joint angles in rad
+    joint_torque_limit: [5,5,9] # Maximum joint torque in N*m
+    default_joint_positions: [2.6, -1.57, 2.3] # Default joint angles in rad
+  asset_options:
+    use_physx_armature: True
+    thickness: 0.001
+    vhacd_enabled: True
+    vhacd_params_resolution: 20000
+    vhacd_params_concavity: 0.0025
+    vhacd_params_alpha: 0.04
+    vhacd_params_beta: 1.0
+    vhacd_params_convex_hull_downsampling: 4
+    vhacd_params_max_num_vertices_per_ch: 128
+
+  observations:
+    enable_tip_obs: False
+    #tip_position_lower: # Size: 3
+    #tip_position_upper:
+    #tip_vel_lower: # Linear velocity limit, size: 3
+    #tip_vel_upper: 
 
 task:
   randomize: True
@@ -104,34 +147,3 @@ task:
             distribution: "gaussian"
             # schedule: "linear"  # "linear" will scale the current random sample by `min(current num steps, schedule_steps) / schedule_steps`
             # schedule_steps: 30000
-      object:
-        scale:
-          range: [0.97, 1.03]
-          operation: "scaling"
-          distribution: "uniform"
-          setup_only: True # Property will only be randomized once before simulation is started. See Domain Randomization Documentation for more info.
-          # schedule: "linear"  # "linear" will scale the current random sample by ``min(current num steps, schedule_steps) / schedule_steps`
-          # schedule_steps: 30000
-        rigid_body_properties:
-          mass:
-            range: [0.7, 1.3]
-            operation: "scaling"
-            distribution: "uniform"
-            setup_only: True # Property will only be randomized once before simulation is started. See Domain Randomization Documentation for more info.
-            # schedule: "linear"  # "linear" will scale the current random sample by ``min(current num steps, schedule_steps) / schedule_steps`
-            # schedule_steps: 30000
-        rigid_shape_properties:
-          friction:
-            num_buckets: 250
-            range: [0.7, 1.3]
-            operation: "scaling"
-            distribution: "uniform"
-            # schedule: "linear"  # "linear" will scale the current random sample by `min(current num steps, schedule_steps) / schedule_steps`
-            # schedule_steps: 30000
-      table:
-        rigid_shape_properties:
-          friction:
-            num_buckets: 250
-            range: [0.5, 1.5]
-            operation: "scaling"
-            distribution: "uniform"
