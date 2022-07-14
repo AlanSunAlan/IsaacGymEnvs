@@ -1,3 +1,4 @@
+from cmath import pi
 from modulefinder import Module
 import os, sys
 from types import SimpleNamespace
@@ -60,6 +61,9 @@ class SinglePlateManipulationTask(ModuleTask):
         self._goal_plate_2d_states = []
 
     def reset_idx(self, env_ids):
+        plate_angle = 150
+        goal_angle = 0
+
         reset_len = len(env_ids)
 
         # Generate random poses for plate and goal plate
@@ -68,17 +72,29 @@ class SinglePlateManipulationTask(ModuleTask):
         plate_pos_x = plate_pos_x.view(reset_len*2, 1)
         plate_pos_y = plate_pos_y.view(reset_len*2, 1)
         plate_positions = torch.cat((plate_pos_x, plate_pos_y, plate_pos_z), dim=-1)
-        plate_quaternions = random_yaw_orientation(reset_len*2, self.device,)
+        plate_quaternions = random_yaw_orientation(reset_len*2, self.device)
+
+        plate_quat = quat_from_euler_xyz(torch.tensor(0), torch.tensor(0), torch.tensor(deg_to_rad(plate_angle))).repeat(reset_len, 1).to(self.device)
+        goal_quat = quat_from_euler_xyz(torch.tensor(0), torch.tensor(0), torch.tensor(deg_to_rad(goal_angle))).repeat(reset_len, 1).to(self.device)
         # Reset plate pose
+        #self.reset_obj_root_tensor(env_ids, 
+        #                          "plate",
+        #                           plate_positions[0:reset_len, :],
+        #                           plate_quaternions[0:reset_len, :])
+        
         self.reset_obj_root_tensor(env_ids, 
-                                   "plate",
+                                  "plate",
                                    plate_positions[0:reset_len, :],
-                                   plate_quaternions[0:reset_len, :])
+                                   plate_quat[:, :])
         # Reset goal plate pose
+        #self.reset_obj_root_tensor(env_ids,
+        #                           'goal_plate',
+        #                           plate_positions[reset_len:, :],
+        #                           plate_quaternions[reset_len:, :])
         self.reset_obj_root_tensor(env_ids,
                                    'goal_plate',
                                    plate_positions[reset_len:, :],
-                                   plate_quaternions[reset_len:, :])
+                                   goal_quat[:, :])
 
         return super().reset_idx(env_ids)
 
@@ -98,10 +114,17 @@ class SinglePlateManipulationTask(ModuleTask):
         # Element-wise compare
         min_yaw_diff = torch.minimum(yaw_diff, two_pi_minus_yaw)
 
+        #print("Plate: ", rad_to_deg(self._plate_2d_states[:, 2]))
+        #print("Goal : ", rad_to_deg(self._goal_plate_2d_states[:, 2]))
+        #print("Raw diff: ", rad_to_deg(yaw_diff))
+        #print("Min diff: ", rad_to_deg(min_yaw_diff))
+
         dis_weighted = self._dis_weight * dis_l2
         yaw_weighted = self._yaw_weight * min_yaw_diff
 
         self.rew_buf[:] = dis_weighted + yaw_weighted
+
+        print("Rew: ", self.rew_buf[0])
 
         update_info = {
             "raw_distance_l2": dis_l2,
@@ -208,6 +231,12 @@ class SinglePlateManipulationTask(ModuleTask):
         return computeGoalPlate2DState(self.num_envs,
                                        self.get_obj_root_tensor('goal_plate'),
                                        self.device)
+
+def rad_to_deg(rad):
+    return rad*180/pi
+
+def deg_to_rad(deg):
+    return deg*pi/180
 
 @torch.jit.script
 def computePlate2DState(num_envs: int, plate_states: torch.Tensor, device: str) -> torch.Tensor:

@@ -68,7 +68,6 @@ class SimpleLocomotionTask(ModuleTask):
     def compute_reward(self):
         self.robot_root_tensor_buf = self.get_robot_root_tensor()
         self.rew_buf[:], heading_vel_reward, deviation_vel_penalty = _compute_rew(
-            self.rew_buf,
             self.robot_root_tensor_buf,
             self.heading_direction,
             self.deviation_direction,
@@ -87,8 +86,7 @@ class SimpleLocomotionTask(ModuleTask):
         return self.knee_states[:, :, 2]
 
 @torch.jit.script
-def _compute_rew(rew_tensor: torch.Tensor,
-                 robot_root_tensor: torch.Tensor,
+def _compute_rew(robot_root_tensor: torch.Tensor,
                  heading_direction: torch.Tensor,
                  deviation_direction: torch.Tensor,
                  baseline_vel: float,
@@ -106,6 +104,6 @@ def _compute_rew(rew_tensor: torch.Tensor,
     heading_vel_reward = flat_heading_vel * vel_weight
     deviation_vel_penalty = flat_deviation_vel * deviation_weight
 
-    total_reward = rew_tensor + heading_vel_reward + deviation_vel_penalty
+    total_reward = heading_vel_reward + deviation_vel_penalty
 
     return total_reward, heading_vel_reward, deviation_vel_penalty
